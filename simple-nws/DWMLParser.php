@@ -15,6 +15,16 @@ class DWMLParser
     private $longitude;
     private $timeframe;
 
+    /**
+     * @var string constant The URL for the National Weather Service interface
+     */
+    const NWS_URL = "http://www.weather.gov/forecasts/xml/sample_products/browser_interface/ndfdXMLclient.php?";
+
+    /**
+     * @var array The allowed values for the timeframe parameter
+     */
+    private $allowedTimeframeValues = array('now', 'today', 'week');
+
 
     /**
      * Class constructor
@@ -37,9 +47,30 @@ class DWMLParser
     }
 
 
+    /**
+     * Validates the input parameters
+     *
+     * @return boolean
+     */
     private function _validate()
     {
-        //
+        // check the datatype for latitude and make sure it's in the valid range
+        if ((!is_float($this->latitude)) || ($this->latitude < -90) || ($this->latitude > 90))
+        {
+            // invalid latitude
+        }
+
+        // check the datatype for longitude and make sure it's in the valid range
+        if ((!is_float($this->longitude)) || ($this->longitude < -180) || ($this->longitude > 180))
+        {
+            // invalid longitude
+        }
+
+        // check timeframe
+        if (!in_array($this->timeframe, $this->allowedTimeframeValues))
+        {
+            // invalid timeframe
+        }
     }
 
 
