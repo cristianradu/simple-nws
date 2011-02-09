@@ -1,4 +1,5 @@
 <?php
+namespace SimpleNWS;
 /**
  * PHP library for accessing NOAA's National Weather Service
  *
