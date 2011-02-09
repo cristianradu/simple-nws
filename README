@@ -1,1 +1,3 @@
-PHP library for accessing NOAA's National Weather Service
+PHP library for accessing NOAA's National Weather Service.
+
+Specifically, providing its REST APIs with a simplified interface.
