@@ -15,6 +15,7 @@ class DWMLParser
     private $_longitude;
     private $_timeframe;
 
+    private $_forecast;
 
     /**
      * Class constructor
@@ -34,6 +35,14 @@ class DWMLParser
 
         // build the URL based on parameters
         $requestURL = $this->_buildURL();
+        echo $requestURL,'<br><br>';
+
+        // perform the request and get the XML data
+        $xmlData = simplexml_load_file($requestURL);
+        echo '<pre>',print_r($xmlData, true),'</pre>';
+
+        // parse the XML data into the forecast model
+        $this->_parseXML($xmlData);
     }
 
 
@@ -81,14 +90,29 @@ class DWMLParser
         $url  = Configuration::C_NWS_URL;
 
         // add the latidude and longitude
-        $url .= 'lat'.$this->_latitude.'&lon'.$this->_longitude.'&';
+        $url .= 'lat='.$this->_latitude.'&lon='.$this->_longitude.'&';
 
         // add the product type
         $url .= Configuration::$productType.'&';
 
         // generate and add the start and end timestamps
-        $startTimestamp = '';
-        $endTimestamp   = '';
+        date_default_timezone_set('America/New_York');
+        switch ($this->_timeframe)
+        {
+            case 'today':
+                $startTimestamp = strtotime('today');
+                $endTimestamp   = strtotime('tomorrow');
+                break;
+            case 'week':
+                $startTimestamp = strtotime('monday this week');
+                $endTimestamp   = strtotime('monday next week');
+                break;
+            case 'now':
+            default:
+                $startTimestamp = strtotime('now');
+                $endTimestamp   = strtotime('now');
+                break;
+        }
         $url .= 'begin='.date('c', $startTimestamp).'&end='.date('c', $endTimestamp).'&';
 
         // append all parameters defined in the configuration file (the format is $param=$param)
@@ -100,6 +124,30 @@ class DWMLParser
         $url .= implode('&', $parameters);
 
         return $url;
+    }
+
+
+    /**
+     * Parses the XML data into the forecast model
+     *
+     * @param SimpleXMLObject $xmlData
+     */
+    private function _parseXML($xmlData)
+    {
+        $this->forecast = new ForecastModel();
+
+        //
+    }
+
+
+    /**
+     * Getter for the forecast model
+     *
+     * @return ForecastModel
+     */
+    public function getForecast()
+    {
+        return $this->_forecast;
     }
 }
 ?>

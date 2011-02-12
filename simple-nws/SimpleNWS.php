@@ -1,8 +1,9 @@
 <?php
 namespace SimpleNWS;
 
-require_once 'DWMLParser.php';
 require_once 'Configuration.php';
+require_once 'DWMLParser.php';
+require_once 'ForecastModel.php';
 
 /**
  * PHP library for accessing NOAA's National Weather Service
@@ -24,6 +25,8 @@ class SimpleNWS
     public function getCurrentConditions($lat, $long)
     {
         //
+        $parser = new DWMLParser($lat, $long, 'now');
+        $forecast = $parser->getForecast();
     }
 
     /**
@@ -35,6 +38,8 @@ class SimpleNWS
     public function getForecastForToday($lat, $long)
     {
         //
+        $parser = new DWMLParser($lat, $long, 'today');
+        $forecast = $parser->getForecast();
     }
 
     /**
@@ -46,6 +51,8 @@ class SimpleNWS
     public function getForecastForWeek($lat, $long)
     {
         //
+        $parser = new DWMLParser($lat, $long, 'week');
+        $forecast = $parser->getForecast();
     }
 }
 ?>
