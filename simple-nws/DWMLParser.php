@@ -30,10 +30,10 @@ class DWMLParser
         $this->_timeframe = $time;
         
         // validate the input parameters
-        $this->_validate();
+        $paramsAreValid = $this->_validate();
 
         // build the URL based on parameters
-        $this->_buildURL();
+        $requestURL = $this->_buildURL();
     }
 
 
@@ -70,12 +70,36 @@ class DWMLParser
      * Generates the NWS URL
      *
      * Example URL: http://www.weather.gov/forecasts/xml/sample_products/browser_interface/ndfdXMLclient.php
-     *                  ?lat=40.75&lon=-73.92&product=time-series&begin=2011-02-09T00:00:00&end=2011-02-10T00:00:00
-     *                  &temp=temp&maxt=maxt&mint=mint&appt=appt&wx=wx&qpf=qpf&snow=snow&sky=sky&rh=rh
+     *                  ?lat=40.75&lon=-73.92&product=time-series&begin=2011-02-09T00:00:00-05:00&end=2011-02-10T00:00:00-05:00
+     *                  &maxt=maxt&mint=mint&temp=temp&appt=appt&wx=wx&qpf=qpf&snow=snow&sky=sky&rh=rh
+     *
+     * @return string
      */
     private function _buildURL()
     {
-        //
+        // start with the NWS URL
+        $url  = Configuration::C_NWS_URL;
+
+        // add the latidude and longitude
+        $url .= 'lat'.$this->_latitude.'&lon'.$this->_longitude.'&';
+
+        // add the product type
+        $url .= Configuration::$productType.'&';
+
+        // generate and add the start and end timestamps
+        $startTimestamp = '';
+        $endTimestamp   = '';
+        $url .= 'begin='.date('c', $startTimestamp).'&end='.date('c', $endTimestamp).'&';
+
+        // append all parameters defined in the configuration file (the format is $param=$param)
+        $parameters = array();
+        foreach (Configuration::$requestParameters as $param)
+        {
+            $parameters[] = $param.'='.$param;
+        }
+        $url .= implode('&', $parameters);
+
+        return $url;
     }
 }
 ?>
