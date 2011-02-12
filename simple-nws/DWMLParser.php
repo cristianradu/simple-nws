@@ -11,19 +11,9 @@ namespace SimpleNWS;
  */
 class DWMLParser
 {
-    private $latitude;
-    private $longitude;
-    private $timeframe;
-
-    /**
-     * @var string constant The URL for the National Weather Service interface
-     */
-    const NWS_URL = "http://www.weather.gov/forecasts/xml/sample_products/browser_interface/ndfdXMLclient.php?";
-
-    /**
-     * @var array The allowed values for the timeframe parameter
-     */
-    private $allowedTimeframeValues = array('now', 'today', 'week');
+    private $_latitude;
+    private $_longitude;
+    private $_timeframe;
 
 
     /**
@@ -35,9 +25,9 @@ class DWMLParser
      */
     public function __construct($lat, $long, $time)
 	{
-        $this->latitude  = $lat;
-        $this->longitude = $long;
-        $this->timeframe = $time;
+        $this->_latitude  = $lat;
+        $this->_longitude = $long;
+        $this->_timeframe = $time;
         
         // validate the input parameters
         $this->_validate();
@@ -54,20 +44,22 @@ class DWMLParser
      */
     private function _validate()
     {
+        // TODO: latitude and longitude should be in the allowed range by NWS
+
         // check the datatype for latitude and make sure it's in the valid range
-        if ((!is_float($this->latitude)) || ($this->latitude < -90) || ($this->latitude > 90))
+        if ((!is_float($this->_latitude)) || ($this->_latitude < -90) || ($this->_latitude > 90))
         {
             // invalid latitude
         }
 
         // check the datatype for longitude and make sure it's in the valid range
-        if ((!is_float($this->longitude)) || ($this->longitude < -180) || ($this->longitude > 180))
+        if ((!is_float($this->_longitude)) || ($this->_longitude < -180) || ($this->_longitude > 180))
         {
             // invalid longitude
         }
 
         // check timeframe
-        if (!in_array($this->timeframe, $this->allowedTimeframeValues))
+        if (!in_array($this->_timeframe, Configuration::$allowedTimeframeValues))
         {
             // invalid timeframe
         }
@@ -79,8 +71,7 @@ class DWMLParser
      *
      * Example URL: http://www.weather.gov/forecasts/xml/sample_products/browser_interface/ndfdXMLclient.php
      *                  ?lat=40.75&lon=-73.92&product=time-series&begin=2011-02-09T00:00:00&end=2011-02-10T00:00:00
-     *                  &maxt=maxt&mint=mint&appt=appt&wx=wx&qpf=qpf&snow=snow&sky=sky&rh=rh
-     * 
+     *                  &temp=temp&maxt=maxt&mint=mint&appt=appt&wx=wx&qpf=qpf&snow=snow&sky=sky&rh=rh
      */
     private function _buildURL()
     {

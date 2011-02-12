@@ -1,5 +1,9 @@
 <?php
 namespace SimpleNWS;
+
+require_once 'DWMLParser.php';
+require_once 'Configuration.php';
+
 /**
  * PHP library for accessing NOAA's National Weather Service
  *
