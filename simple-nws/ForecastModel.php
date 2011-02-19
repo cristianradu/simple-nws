@@ -17,7 +17,7 @@ class ForecastModel
     /**
      * @var array Array with hourly recorded temperatures
      */
-    private $_hourlyTemperature;
+    private $_hourlyRecordedTemperature;
     /**
      * @var array Array with hourly apparent temperatures
      */
@@ -76,17 +76,17 @@ class ForecastModel
     /**
      * @return array
      */
-    public function getHourlyTemperature()
+    public function getHourlyRecordedTemperature()
     {
-        return $this->_hourlyTemperature;
+        return $this->_hourlyRecordedTemperature;
     }
 
     /**
-     * @param array $hourlyTemperature
+     * @param array $hourlyRecordedTemperature
      */
-    public function setHourlyTemperature($hourlyTemperature)
+    public function setHourlyRecordedTemperature($hourlyRecordedTemperature)
     {
-        $this->_hourlyTemperature = $hourlyTemperature;
+        $this->_hourlyRecordedTemperature = $hourlyRecordedTemperature;
     }
 
 
