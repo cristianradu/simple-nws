@@ -39,7 +39,6 @@ class DWMLParser
 
         // perform the request and get the XML data
         $xmlData = simplexml_load_file($requestURL);
-        echo '<pre>',print_r($xmlData, true),'</pre>';
 
         // parse the XML data into the forecast model
         $this->_parseXML($xmlData);
@@ -149,11 +148,11 @@ class DWMLParser
             // the key is a unique string (i.e. "k-p24h-n7-1")
             $key = strval($layout->{'layout-key'});
 
-            // we need to go through each value and cast it as a string, otherwise we'll end up with SimpleXML objects
+            // we ngo through each value and reformat it as year-month-day-hour (there are no min/sec values)
             $values = array();
             foreach ($layout->{'start-valid-time'} as $time)
             {
-                $values[] = strval($time);
+                $values[] = date('Y-m-d-H', strtotime(strval($time)));
             }
 
             // add the key/value pair to the temp array
@@ -170,10 +169,50 @@ class DWMLParser
         // temperature values
         foreach ($parameters->temperature as $temperature)
         {
-            // current temperature
+            // hourly recorded temperatures
+            if ($temperature->attributes()->type == 'hourly')
+            {
+                $hourlyTemperatures = array();
+
+                // get the time layout for this parameter
+                $layout = strval($temperature->attributes()->{'time-layout'});
+
+                // we'll go through each value and assign it to its specific time interval
+                for ($i = 0; $i < count($temperature->value); $i++)
+                {
+                    // the timestamp for this index in the time layout
+                    $key = $timeLayouts[$layout][$i];
+                    // the temperature value for this index
+                    $value = intval($temperature->value[$i]);
+
+                    $hourlyTemperatures[$key] = $value;
+                }
+
+                // save the maximum temperature in the forecast model
+                $this->_forecast->setHourlyRecordedTemperature($hourlyTemperatures);
+            }
+
+            // hourly apparent temperatures
             if ($temperature->attributes()->type == 'apparent')
             {
-                $this->_forecast->setCurrentTemperature(intval($temperature->value));
+                $apparentTemperatures = array();
+
+                // get the time layout for this parameter
+                $layout = strval($temperature->attributes()->{'time-layout'});
+
+                // we'll go through each value and assign it to its specific time interval
+                for ($i = 0; $i < count($temperature->value); $i++)
+                {
+                    // the timestamp for this index in the time layout
+                    $key = $timeLayouts[$layout][$i];
+                    // the temperature value for this index
+                    $value = intval($temperature->value[$i]);
+
+                    $apparentTemperatures[$key] = $value;
+                }
+
+                // save the maximum temperature in the forecast model
+                $this->_forecast->setHourlyApparentTemperature($apparentTemperatures);
             }
 
             // daily maximum temperatures
@@ -223,6 +262,101 @@ class DWMLParser
             }
         }
 
+        // precipitation values
+        foreach ($parameters->precipitation as $precipitation)
+        {
+            // hourly precipitation
+            if ($precipitation->attributes()->type == 'liquid')
+            {
+                $hourlyPrecipitation = array();
+
+                // get the time layout for this parameter
+                $layout = strval($precipitation->attributes()->{'time-layout'});
+
+                // we'll go through each value and assign it to its specific time interval
+                for ($i = 0; $i < count($precipitation->value); $i++)
+                {
+                    // the timestamp for this index in the time layout
+                    $key = $timeLayouts[$layout][$i];
+                    // the temperature value for this index
+                    $value = intval($precipitation->value[$i]);
+
+                    $hourlyPrecipitation[$key] = $value;
+                }
+
+                // save the liquid precipitation in the forecast model
+                $this->_forecast->setHourlyPrecipitation($hourlyPrecipitation);
+            }
+
+            // hourly snow amount
+            if ($precipitation->attributes()->type == 'snow')
+            {
+                $hourlySnowAmount = array();
+
+                // get the time layout for this parameter
+                $layout = strval($precipitation->attributes()->{'time-layout'});
+
+                // we'll go through each value and assign it to its specific time interval
+                for ($i = 0; $i < count($precipitation->value); $i++)
+                {
+                    // the timestamp for this index in the time layout
+                    $key = $timeLayouts[$layout][$i];
+                    // the temperature value for this index
+                    $value = intval($precipitation->value[$i]);
+
+                    $hourlySnowAmount[$key] = $value;
+                }
+
+                // save the liquid precipitation in the forecast model
+                $this->_forecast->setHourlySnowAmount($hourlySnowAmount);
+            }
+        }
+
+        // hourly cloud cover
+        foreach ($parameters->{'cloud-amount'} as $cloudCover)
+        {
+            $hourlyCloudCover = array();
+
+            // get the time layout for this parameter
+            $layout = strval($cloudCover->attributes()->{'time-layout'});
+
+            // we'll go through each value and assign it to its specific time interval
+            for ($i = 0; $i < count($cloudCover->value); $i++)
+            {
+                // the timestamp for this index in the time layout
+                $key = $timeLayouts[$layout][$i];
+                // the temperature value for this index
+                $value = intval($cloudCover->value[$i]);
+
+                $hourlyCloudCover[$key] = $value;
+            }
+
+            // save the liquid precipitation in the forecast model
+            $this->_forecast->setHourlyCloudCover($hourlyCloudCover);
+        }
+
+        // hourly relative humidity
+        foreach ($parameters->humidity as $humidity)
+        {
+            $hourlyHumidity = array();
+
+            // get the time layout for this parameter
+            $layout = strval($humidity->attributes()->{'time-layout'});
+
+            // we'll go through each value and assign it to its specific time interval
+            for ($i = 0; $i < count($humidity->value); $i++)
+            {
+                // the timestamp for this index in the time layout
+                $key = $timeLayouts[$layout][$i];
+                // the temperature value for this index
+                $value = intval($humidity->value[$i]);
+
+                $hourlyHumidity[$key] = $value;
+            }
+
+            // save the liquid precipitation in the forecast model
+            $this->_forecast->setHourlyHumidity($hourlyHumidity);
+        }
     }
 
 
