@@ -29,9 +29,13 @@ class ForecastModel
     private $_dailyMinimumTemperature;
 
     /**
-     * @var array Array with hourly temperatures
+     * @var array Array with hourly recorded temperatures
      */
     private $_hourlyTemperature;
+    /**
+     * @var array Array with hourly apparent temperatures
+     */
+    private $_hourlyApparentTemperature;
 
     /**
      * @var array Array with hourly precipitation
@@ -139,6 +143,23 @@ class ForecastModel
     public function setHourlyTemperature($hourlyTemperature)
     {
         $this->_hourlyTemperature = $hourlyTemperature;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getHourlyApparentTemperature()
+    {
+        return $this->_hourlyApparentTemperature;
+    }
+
+    /**
+     * @param array $hourlyApparentTemperature
+     */
+    public function setHourlyApparentTemperature($hourlyApparentTemperature)
+    {
+        $this->_hourlyApparentTemperature = $hourlyApparentTemperature;
     }
 
 
