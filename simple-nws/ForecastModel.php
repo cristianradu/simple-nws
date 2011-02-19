@@ -15,9 +15,13 @@ class ForecastModel
     private $_timeLayouts;
 
     /**
-     * @var integer Current temperature. Undefined for weekly requests
+     * @var array Array with hourly recorded temperatures
      */
-    private $_currentTemperature;
+    private $_hourlyTemperature;
+    /**
+     * @var array Array with hourly apparent temperatures
+     */
+    private $_hourlyApparentTemperature;
 
     /**
      * @var array Array with maximum temperatures by day. For current/today requests it will only have 1 element
@@ -27,15 +31,6 @@ class ForecastModel
      * @var array Array with minimum temperatures by day. For current/today requests it will only have 1 element
      */
     private $_dailyMinimumTemperature;
-
-    /**
-     * @var array Array with hourly recorded temperatures
-     */
-    private $_hourlyTemperature;
-    /**
-     * @var array Array with hourly apparent temperatures
-     */
-    private $_hourlyApparentTemperature;
 
     /**
      * @var array Array with hourly precipitation
@@ -79,19 +74,36 @@ class ForecastModel
 
 
     /**
-     * @return integer
+     * @return array
      */
-    public function getCurrentTemperature()
+    public function getHourlyTemperature()
     {
-        return $this->_currentTemperature;
+        return $this->_hourlyTemperature;
     }
 
     /**
-     * @param integer $currentTemperature
+     * @param array $hourlyTemperature
      */
-    public function setCurrentTemperature($currentTemperature)
+    public function setHourlyTemperature($hourlyTemperature)
     {
-        $this->_currentTemperature = $currentTemperature;
+        $this->_hourlyTemperature = $hourlyTemperature;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getHourlyApparentTemperature()
+    {
+        return $this->_hourlyApparentTemperature;
+    }
+
+    /**
+     * @param array $hourlyApparentTemperature
+     */
+    public function setHourlyApparentTemperature($hourlyApparentTemperature)
+    {
+        $this->_hourlyApparentTemperature = $hourlyApparentTemperature;
     }
 
 
@@ -126,40 +138,6 @@ class ForecastModel
     public function setDailyMinimumTemperature($dailyMinimumTemperature)
     {
         $this->_dailyMinimumTemperature = $dailyMinimumTemperature;
-    }
-
-
-    /**
-     * @return array
-     */
-    public function getHourlyTemperature()
-    {
-        return $this->_hourlyTemperature;
-    }
-
-    /**
-     * @param array $hourlyTemperature
-     */
-    public function setHourlyTemperature($hourlyTemperature)
-    {
-        $this->_hourlyTemperature = $hourlyTemperature;
-    }
-
-
-    /**
-     * @return array
-     */
-    public function getHourlyApparentTemperature()
-    {
-        return $this->_hourlyApparentTemperature;
-    }
-
-    /**
-     * @param array $hourlyApparentTemperature
-     */
-    public function setHourlyApparentTemperature($hourlyApparentTemperature)
-    {
-        $this->_hourlyApparentTemperature = $hourlyApparentTemperature;
     }
 
 
