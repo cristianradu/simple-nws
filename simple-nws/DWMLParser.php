@@ -104,8 +104,8 @@ class DWMLParser
                 $endTimestamp   = strtotime('tomorrow');
                 break;
             case 'week':
-                $startTimestamp = strtotime('monday this week');
-                $endTimestamp   = strtotime('monday next week');
+                $startTimestamp = strtotime('today');
+                $endTimestamp   = strtotime('today + 1 week');
                 break;
             case 'now':
             default:
@@ -134,9 +134,95 @@ class DWMLParser
      */
     private function _parseXML($xmlData)
     {
-        $this->forecast = new ForecastModel();
+        // create the forecast model object
+        $this->_forecast = new ForecastModel();
 
-        //
+
+        // first build the time intervals
+        $timeLayout = $xmlData->data->{'time-layout'};
+
+        // array to store the time intervals
+        $timeLayouts = array();
+
+        foreach ($timeLayout as $layout)
+        {
+            // the key is a unique string (i.e. "k-p24h-n7-1")
+            $key = strval($layout->{'layout-key'});
+
+            // we need to go through each value and cast it as a string, otherwise we'll end up with SimpleXML objects
+            $values = array();
+            foreach ($layout->{'start-valid-time'} as $time)
+            {
+                $values[] = strval($time);
+            }
+
+            // add the key/value pair to the temp array
+            $timeLayouts[$key] = $values;
+        }
+
+        // save the intervals in the forecast model
+        $this->_forecast->setTimeLayouts($timeLayouts);
+
+
+        // now iterate over the parameters
+        $parameters  = $xmlData->data->parameters;
+
+        // temperature values
+        foreach ($parameters->temperature as $temperature)
+        {
+            // current temperature
+            if ($temperature->attributes()->type == 'apparent')
+            {
+                $this->_forecast->setCurrentTemperature(intval($temperature->value));
+            }
+
+            // daily maximum temperatures
+            if ($temperature->attributes()->type == 'maximum')
+            {
+                $maximumTemperatures = array();
+
+                // get the time layout for this parameter
+                $layout = strval($temperature->attributes()->{'time-layout'});
+
+                // we'll go through each value and assign it to its specific time interval
+                for ($i = 0; $i < count($temperature->value); $i++)
+                {
+                    // the timestamp for this index in the time layout
+                    $key = $timeLayouts[$layout][$i];
+                    // the temperature value for this index
+                    $value = intval($temperature->value[$i]);
+
+                    $maximumTemperatures[$key] = $value;
+                }
+
+                // save the maximum temperature in the forecast model
+                $this->_forecast->setDailyMaximumTemperature($maximumTemperatures);
+            }
+
+            // daily minimum temperatures
+            if ($temperature->attributes()->type == 'minimum')
+            {
+                $minimumTemperatures = array();
+
+                // get the time layout for this parameter
+                $layout = strval($temperature->attributes()->{'time-layout'});
+
+                // we'll go through each value and assign it to its specific time interval
+                for ($i = 0; $i < count($temperature->value); $i++)
+                {
+                    // the timestamp for this index in the time layout
+                    $key = $timeLayouts[$layout][$i];
+                    // the temperature value for this index
+                    $value = intval($temperature->value[$i]);
+
+                    $minimumTemperatures[$key] = $value;
+                }
+
+                // save the minimum temperature in the forecast model
+                $this->_forecast->setDailyMinimumTemperature($minimumTemperatures);
+            }
+        }
+
     }
 
 
