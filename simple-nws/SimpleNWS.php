@@ -21,12 +21,15 @@ class SimpleNWS
      *
      * @param float $lat Latitude
      * @param float $long Longitude
+     * @return ForecastModel
      */
     public function getCurrentConditions($lat, $long)
     {
         //
         $parser = new DWMLParser($lat, $long, 'now');
         $forecast = $parser->getForecast();
+
+        return $forecast;
     }
 
     /**
@@ -34,12 +37,15 @@ class SimpleNWS
      *
      * @param float $lat Latitude
      * @param float $long Longitude
+     * @return ForecastModel
      */
     public function getForecastForToday($lat, $long)
     {
         //
         $parser = new DWMLParser($lat, $long, 'today');
         $forecast = $parser->getForecast();
+
+        return $forecast;
     }
 
     /**
@@ -47,12 +53,15 @@ class SimpleNWS
      *
      * @param float $lat Latitude
      * @param float $long Longitude
+     * @return ForecastModel
      */
     public function getForecastForWeek($lat, $long)
     {
         //
         $parser = new DWMLParser($lat, $long, 'week');
         $forecast = $parser->getForecast();
+
+        return $forecast;
     }
 }
 ?>
