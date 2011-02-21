@@ -52,24 +52,25 @@ class DWMLParser
      */
     private function _validate()
     {
-        // TODO: latitude and longitude should be in the allowed range by NWS
-
         // check the datatype for latitude and make sure it's in the valid range
-        if ((!is_float($this->_latitude)) || ($this->_latitude < -90) || ($this->_latitude > 90))
+        if ((!is_float($this->_latitude)) || ($this->_latitude < Configuration::$minLatitude) || ($this->_latitude > Configuration::$maxLatitude))
         {
             // invalid latitude
+            throw new \Exception('Invalid latitude. Allowed values are between '.Configuration::$minLatitude.' and '.Configuration::$maxLatitude);
         }
 
         // check the datatype for longitude and make sure it's in the valid range
-        if ((!is_float($this->_longitude)) || ($this->_longitude < -180) || ($this->_longitude > 180))
+        if ((!is_float($this->_longitude)) || ($this->_longitude < Configuration::$minLongitude) || ($this->_longitude > Configuration::$maxLongitude))
         {
             // invalid longitude
+            throw new \Exception('Invalid longitude. Allowed values are between '.Configuration::$minLongitude.' and '.Configuration::$maxLongitude);
         }
 
         // check timeframe
         if (!in_array($this->_timeframe, Configuration::$allowedTimeframeValues))
         {
             // invalid timeframe
+            throw new \Exception('Invalid timeframe. Allowed values: '.implode(', ', Configuration::$allowedTimeframeValues));
         }
     }
 
@@ -357,6 +358,9 @@ class DWMLParser
             // save the liquid precipitation in the forecast model
             $this->_forecast->setHourlyHumidity($hourlyHumidity);
         }
+
+        // weather conditions
+        // TODO
     }
 
 

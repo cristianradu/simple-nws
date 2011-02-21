@@ -19,6 +19,34 @@ class Configuration
      */
     static $allowedTimeframeValues = array('now', 'today', 'week');
 
+
+    /**
+     * The minimum and maximum latitude and longitude values for the CONUS (continental United States) grid
+     * The four corners are:
+     *     20.191999, -121.554001
+     *     20.331773,  -69.208160
+     *     50.105547,  -60.885558
+     *     49.939721, -130.103438
+     * from: http://www.weather.gov/forecasts/xml/SOAP_server/ndfdXMLclient.php?whichClient=CornerPoints&sector=conus
+     */
+    /**
+     * @var float Minimum latitude
+     */
+    static $minLatitude  =   20.19;
+    /**
+     * @var float Maximum latitude
+     */
+    static $maxLatitude  =   50.11;
+    /**
+     * @var float Minimum longitude
+     */
+    static $minLongitude = -130.11;
+    /**
+     * @var float Maximum longitude
+     */
+    static $maxLongitude =  -60.87;
+
+
     /**
      * @var string The product type being returned. This is always 'time-series'
      */
