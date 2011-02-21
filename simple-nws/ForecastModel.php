@@ -225,5 +225,33 @@ class ForecastModel
         $this->_weatherConditions = $weatherConditions;
     }
 
+
+    /**
+     * Convertor from Fahrenheit to Celsius
+     *  The result will be rounded to the nearest int
+     *
+     * @param mixed $degreesF The temperature(s) in Fahrenheit
+     * @return mixed
+     */
+    public function convertToCelsius($degreesF)
+    {
+        // the input can either be a scalar temperature or an array
+        if (is_array($degreesF))
+        {
+            $degreesC = array();
+
+            foreach ($degreesF as $key => $value)
+            {
+                $degreesC[$key] = $this->convertToCelsius($value);
+            }
+        }
+        else
+        {
+            $degreesC = round(($degreesF - 32) * 5/9);
+        }
+
+        return $degreesC;
+    }
+
 }
 ?>
