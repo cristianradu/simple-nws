@@ -14,7 +14,40 @@ require_once 'ForecastModel.php';
  */
 class SimpleNWS
 {
-    //
+    /**
+     * @var float Latitude
+     */
+    private $_latitude;
+    /**
+     * @var float Longitude
+     */
+    private $_longitude;
+
+
+    /**
+     * Class constructor
+     * Latitude and longitude values can either be stored in private variables or passed directly to the functions
+     */
+    public function __construct($lat = 0.0, $long = 0.0)
+    {
+        $this->_storeLatAndLong($lat, $long);
+    }
+
+
+    /**
+     * Saves the supplied latitude and longitude into the private variables
+     *
+     * @param float $lat Latitude
+     * @param float $long Longitude
+     */
+    private function _storeLatAndLong($lat, $long)
+    {
+        if (!empty($lat))
+            $this->_latitude  = $lat;
+        if (!empty($long))
+            $this->_longitude = $long;
+    }
+
 
     /**
      * Returns current weather conditions
@@ -23,10 +56,11 @@ class SimpleNWS
      * @param float $long Longitude
      * @return ForecastModel
      */
-    public function getCurrentConditions($lat, $long)
+    public function getCurrentConditions($lat = 0.0, $long = 0.0)
     {
-        //
-        $parser = new DWMLParser($lat, $long, 'now');
+        $this->_storeLatAndLong($lat, $long);
+
+        $parser = new DWMLParser($this->_latitude, $this->_longitude, 'now');
         $forecast = $parser->getForecast();
 
         return $forecast;
@@ -39,10 +73,11 @@ class SimpleNWS
      * @param float $long Longitude
      * @return ForecastModel
      */
-    public function getForecastForToday($lat, $long)
+    public function getForecastForToday($lat = 0.0, $long = 0.0)
     {
-        //
-        $parser = new DWMLParser($lat, $long, 'today');
+        $this->_storeLatAndLong($lat, $long);
+
+        $parser = new DWMLParser($this->_latitude, $this->_longitude, 'today');
         $forecast = $parser->getForecast();
 
         return $forecast;
@@ -55,10 +90,11 @@ class SimpleNWS
      * @param float $long Longitude
      * @return ForecastModel
      */
-    public function getForecastForWeek($lat, $long)
+    public function getForecastForWeek($lat = 0.0, $long = 0.0)
     {
-        //
-        $parser = new DWMLParser($lat, $long, 'week');
+        $this->_storeLatAndLong($lat, $long);
+
+        $parser = new DWMLParser($this->_latitude, $this->_longitude, 'week');
         $forecast = $parser->getForecast();
 
         return $forecast;

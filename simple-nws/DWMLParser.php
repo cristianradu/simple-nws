@@ -11,12 +11,25 @@ namespace SimpleNWS;
  */
 class DWMLParser
 {
+    /**
+     * @var float Latitude
+     */
     private $_latitude;
+    /**
+     * @var float Longitude
+     */
     private $_longitude;
+    /**
+     * @var string Timeframe. Check the configuration file for allowed values
+     */
     private $_timeframe;
 
+    /**
+     * @var ForecastModel The forecast model
+     */
     private $_forecast;
 
+    
     /**
      * Class constructor
      *
