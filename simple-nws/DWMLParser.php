@@ -320,7 +320,7 @@ class DWMLParser
                     $hourlySnowAmount[$key] = $value;
                 }
 
-                // save the liquid precipitation in the forecast model
+                // save the snow amount in the forecast model
                 $this->_forecast->setHourlySnowAmount($hourlySnowAmount);
             }
         }
@@ -344,7 +344,7 @@ class DWMLParser
                 $hourlyCloudCover[$key] = $value;
             }
 
-            // save the liquid precipitation in the forecast model
+            // save the cloud cover in the forecast model
             $this->_forecast->setHourlyCloudCover($hourlyCloudCover);
         }
 
@@ -367,30 +367,40 @@ class DWMLParser
                 $hourlyHumidity[$key] = $value;
             }
 
-            // save the liquid precipitation in the forecast model
+            // save the relative humidity in the forecast model
             $this->_forecast->setHourlyHumidity($hourlyHumidity);
         }
 
-        // due to increase complexity, weather conditions are parsed by a dedicated function
-        $weather  = $xmlData->data->weather;
-        $weatherConditions = $this->parseXMLWeatherConditions($weather);
-        $this->_forecast->setWeatherConditions($weatherConditions);
-    }
 
+        // weather conditions
+        $weather = $parameters->weather;
 
-    /**
-     * Parses the Weather Conditions XML data into the forecast model
-     *
-     * @param SimpleXMLObject $xmlWeatherConditionsData
-     * @return array
-     */
-    private function parseXMLWeatherConditions($xmlWeatherConditionsData)
-    {
-        $weatherConditions = array();
+        // get the time layout for the weather conditions
+        $layout = strval($weather->attributes()->{'time-layout'});
 
-        //
+        $hourlyWeatherConditions = array();
 
-        return $weatherConditions;
+        // we'll go through each value and assign it to its specific time interval
+        for ($i = 0; $i < count($weather->{'weather-conditions'}); $i++)
+        {
+            // check if we have any value for this timestamp
+            if ($weather->{'weather-conditions'}[$i]->value)
+            {
+                // the timestamp for this index in the time layout
+                $key = $timeLayouts[$layout][$i];
+
+                // the weather conditions for this index
+                $conditions = array();
+                $conditions['weather-type'] = strval($weather->{'weather-conditions'}[$i]->value->attributes()->{'weather-type'});
+                $conditions['intensity']    = strval($weather->{'weather-conditions'}[$i]->value->attributes()->intensity);
+                $conditions['coverage']     = strval($weather->{'weather-conditions'}[$i]->value->attributes()->coverage);
+
+                $hourlyWeatherConditions[$key] = $conditions;
+            }
+        }
+
+        // save the weather conditions in the forecast model
+        $this->_forecast->setWeatherConditions($hourlyWeatherConditions);
     }
 
 
