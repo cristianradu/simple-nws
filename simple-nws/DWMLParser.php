@@ -44,11 +44,14 @@ class DWMLParser
         $this->_timeframe = $time;
         
         // validate the input parameters
-        $paramsAreValid = $this->_validate();
+        $this->_validate();
+
+        // create the forecast model object
+        $this->_forecast = new ForecastModel();
 
         // build the URL based on parameters
         $requestURL = $this->_buildURL();
-        echo $requestURL,'<br><br>';
+        $this->_forecast->setRequestURL($requestURL);
 
         // perform the request and get the XML data
         $xmlData = simplexml_load_file($requestURL);
@@ -147,10 +150,6 @@ class DWMLParser
      */
     private function _parseXML($xmlData)
     {
-        // create the forecast model object
-        $this->_forecast = new ForecastModel();
-
-
         // first build the time intervals
         $timeLayout = $xmlData->data->{'time-layout'};
 

@@ -54,6 +54,11 @@ class ForecastModel
      */
     private $_weatherConditions;
 
+    /**
+     * @var string The generated URL used to access the NWS service for this forecast
+     */
+    private $_requestURL;
+
 
 
     /**
@@ -223,6 +228,23 @@ class ForecastModel
     public function setWeatherConditions($weatherConditions)
     {
         $this->_weatherConditions = $weatherConditions;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getRequestURL()
+    {
+        return $this->_requestURL;
+    }
+
+    /**
+     * @param string $requestURL
+     */
+    public function setRequestURL($requestURL)
+    {
+        $this->_requestURL = $requestURL;
     }
 
 
