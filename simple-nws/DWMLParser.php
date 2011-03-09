@@ -372,8 +372,26 @@ class DWMLParser
             $this->_forecast->setHourlyHumidity($hourlyHumidity);
         }
 
-        // weather conditions
-        // TODO
+        // due to increase complexity, weather conditions are parsed by a dedicated function
+        $weather  = $xmlData->data->weather;
+        $weatherConditions = $this->parseXMLWeatherConditions($weather);
+        $this->_forecast->setWeatherConditions($weatherConditions);
+    }
+
+
+    /**
+     * Parses the Weather Conditions XML data into the forecast model
+     *
+     * @param SimpleXMLObject $xmlWeatherConditionsData
+     * @return array
+     */
+    private function parseXMLWeatherConditions($xmlWeatherConditionsData)
+    {
+        $weatherConditions = array();
+
+        //
+
+        return $weatherConditions;
     }
 
 
