@@ -55,6 +55,11 @@ class ForecastModel
     private $_weatherConditions;
 
     /**
+     * @var array Array with complete weather data organized by timestamp
+     */
+    private $_completeWeatherData;
+
+    /**
      * @var string The generated URL used to access the NWS service for this forecast
      */
     private $_requestURL;
@@ -228,6 +233,25 @@ class ForecastModel
     public function setWeatherConditions($weatherConditions)
     {
         $this->_weatherConditions = $weatherConditions;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getCompleteWeatherData()
+    {
+        return $this->_completeWeatherData;
+    }
+
+    /**
+     * @param string $timestamp
+     * @param string $weatherType
+     * @param mixed $weatherData
+     */
+    public function setWeatherDataForTimestamp($timestamp, $weatherType, $weatherData)
+    {
+        $this->_completeWeatherData[$timestamp][$weatherType] = $weatherData;
     }
 
 
