@@ -13,6 +13,10 @@ class ForecastModel
      * @var array Array with time layouts. For breaking down by day and hour
      */
     private $_timeLayouts;
+    /**
+     * @var array Array with date layouts. For breaking down by day
+     */
+    private $_dateLayouts;
 
     /**
      * @var array Array with hourly recorded temperatures
@@ -60,6 +64,11 @@ class ForecastModel
     private $_completeWeatherData;
 
     /**
+     * @var array Array with complete, ready-to-use weather data organized by day
+     */
+    private $_weatherData;
+
+    /**
      * @var string The generated URL used to access the NWS service for this forecast
      */
     private $_requestURL;
@@ -80,6 +89,23 @@ class ForecastModel
     public function setTimeLayouts($timeLayouts)
     {
         $this->_timeLayouts = $timeLayouts;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getDateLayouts()
+    {
+        return $this->_dateLayouts;
+    }
+
+    /**
+     * @param array $dateLayouts
+     */
+    public function setDateLayouts($dateLayouts)
+    {
+        $this->_dateLayouts = $dateLayouts;
     }
 
 
@@ -269,6 +295,28 @@ class ForecastModel
     public function setRequestURL($requestURL)
     {
         $this->_requestURL = $requestURL;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getWeatherData()
+    {
+        return $this->_weatherData;
+    }
+
+
+    /**
+     * Organized all raw weather data by day, in a ready-to use format
+     */
+    public function organizeWeatherData()
+    {
+        $weatherData = array();
+
+        //
+        
+        $this->_weatherData = $weatherData;
     }
 
 

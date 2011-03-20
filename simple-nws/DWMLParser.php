@@ -153,8 +153,9 @@ class DWMLParser
         // first build the time intervals
         $timeLayout = $xmlData->data->{'time-layout'};
 
-        // array to store the time intervals
+        // arrays to store the time/date intervals
         $timeLayouts = array();
+        $dateLayouts = array();
 
         foreach ($timeLayout as $layout)
         {
@@ -165,15 +166,21 @@ class DWMLParser
             $values = array();
             foreach ($layout->{'start-valid-time'} as $time)
             {
-                $values[] = date('Y-m-d-H', strtotime(strval($time)));
+                $values[]      = date('Y-m-d-H', strtotime(strval($time)));
+                $dateLayouts[] = date('Y-m-d',   strtotime(strval($time)));
             }
 
             // add the key/value pair to the temp array
             $timeLayouts[$key] = $values;
         }
 
+        // for the days, remove the duplicates and sort
+        $dateLayouts = array_unique($dateLayouts);
+        sort($dateLayouts);
+
         // save the intervals in the forecast model
         $this->_forecast->setTimeLayouts($timeLayouts);
+        $this->_forecast->setDateLayouts($dateLayouts);
 
 
         // now iterate over the parameters
@@ -415,6 +422,10 @@ class DWMLParser
 
         // save the weather conditions in the forecast model
         $this->_forecast->setWeatherConditions($hourlyWeatherConditions);
+
+
+        // organize the raw weather data by day, in a ready-to-use format
+        $this->_forecast->organizeWeatherData();
     }
 
 
