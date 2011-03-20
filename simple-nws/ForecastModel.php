@@ -361,83 +361,19 @@ class ForecastModel
 
 
             // aggregate data for the morning
-            $morningData = array();
-
-            $morningData['recorded_temperature'] = $this->_averageValues($date, Configuration::$morningInterval, $this->_hourlyRecordedTemperature);
-            $morningData['apparent_temperature'] = $this->_averageValues($date, Configuration::$morningInterval, $this->_hourlyApparentTemperature);
-            $morningData['precipitation']        = $this->_averageValues($date, Configuration::$morningInterval, $this->_hourlyPrecipitation);
-            $morningData['snow_amount']          = $this->_averageValues($date, Configuration::$morningInterval, $this->_hourlySnowAmount);
-            $morningData['cloud_coverage']       = $this->_averageValues($date, Configuration::$morningInterval, $this->_hourlyCloudCover);
-            $morningData['humidity']             = $this->_averageValues($date, Configuration::$morningInterval, $this->_hourlyHumidity);
-            $morningData['weather_conditions']   = $this->_averageWeatherConditions($date, Configuration::$morningInterval);
-            $morningData['sky_condition']        = $this->_getSkyCondition($morningData['cloud_coverage'], TRUE);
-            $morningData['description']          = $this->_getDescription($morningData['sky_condition'], $morningData['weather_conditions']);
-
-            $day['morning'] = $morningData;
-
+            $day['morning'] = $this->_aggregateWeatherData($date, Configuration::$morningInterval);
 
             // aggregate data for the afternoon
-            $afternoonData = array();
-
-            $afternoonData['recorded_temperature'] = $this->_averageValues($date, Configuration::$afternoonInterval, $this->_hourlyRecordedTemperature);
-            $afternoonData['apparent_temperature'] = $this->_averageValues($date, Configuration::$afternoonInterval, $this->_hourlyApparentTemperature);
-            $afternoonData['precipitation']        = $this->_averageValues($date, Configuration::$afternoonInterval, $this->_hourlyPrecipitation);
-            $afternoonData['snow_amount']          = $this->_averageValues($date, Configuration::$afternoonInterval, $this->_hourlySnowAmount);
-            $afternoonData['cloud_coverage']       = $this->_averageValues($date, Configuration::$afternoonInterval, $this->_hourlyCloudCover);
-            $afternoonData['humidity']             = $this->_averageValues($date, Configuration::$afternoonInterval, $this->_hourlyHumidity);
-            $afternoonData['weather_conditions']   = $this->_averageWeatherConditions($date, Configuration::$afternoonInterval);
-            $afternoonData['sky_condition']        = $this->_getSkyCondition($afternoonData['cloud_coverage'], TRUE);
-            $afternoonData['description']          = $this->_getDescription($afternoonData['sky_condition'], $afternoonData['weather_conditions']);
-
-            $day['afternoon'] = $afternoonData;
-
+            $day['afternoon'] = $this->_aggregateWeatherData($date, Configuration::$afternoonInterval);
 
             // aggregate data for the evening
-            $afternoonData = array();
-
-            $eveningData['recorded_temperature'] = $this->_averageValues($date, Configuration::$eveningInterval, $this->_hourlyRecordedTemperature);
-            $eveningData['apparent_temperature'] = $this->_averageValues($date, Configuration::$eveningInterval, $this->_hourlyApparentTemperature);
-            $eveningData['precipitation']        = $this->_averageValues($date, Configuration::$eveningInterval, $this->_hourlyPrecipitation);
-            $eveningData['snow_amount']          = $this->_averageValues($date, Configuration::$eveningInterval, $this->_hourlySnowAmount);
-            $eveningData['cloud_coverage']       = $this->_averageValues($date, Configuration::$eveningInterval, $this->_hourlyCloudCover);
-            $eveningData['humidity']             = $this->_averageValues($date, Configuration::$eveningInterval, $this->_hourlyHumidity);
-            $eveningData['weather_conditions']   = $this->_averageWeatherConditions($date, Configuration::$eveningInterval);
-            $eveningData['sky_condition']        = $this->_getSkyCondition($eveningData['cloud_coverage'], FALSE);
-            $eveningData['description']          = $this->_getDescription($eveningData['sky_condition'], $eveningData['weather_conditions']);
-
-            $day['evening'] = $eveningData;
-
+            $day['evening'] = $this->_aggregateWeatherData($date, Configuration::$eveningInterval);
 
             // aggregate data for the night
-            $nightData = array();
-
-            $nightData['recorded_temperature'] = $this->_averageValues($date, Configuration::$nightInterval, $this->_hourlyRecordedTemperature);
-            $nightData['apparent_temperature'] = $this->_averageValues($date, Configuration::$nightInterval, $this->_hourlyApparentTemperature);
-            $nightData['precipitation']        = $this->_averageValues($date, Configuration::$nightInterval, $this->_hourlyPrecipitation);
-            $nightData['snow_amount']          = $this->_averageValues($date, Configuration::$nightInterval, $this->_hourlySnowAmount);
-            $nightData['cloud_coverage']       = $this->_averageValues($date, Configuration::$nightInterval, $this->_hourlyCloudCover);
-            $nightData['humidity']             = $this->_averageValues($date, Configuration::$nightInterval, $this->_hourlyHumidity);
-            $nightData['weather_conditions']   = $this->_averageWeatherConditions($date, Configuration::$nightInterval);
-            $nightData['sky_condition']        = $this->_getSkyCondition($nightData['cloud_coverage'], FALSE);
-            $nightData['description']          = $this->_getDescription($nightData['sky_condition'], $nightData['weather_conditions']);
-
-            $day['night'] = $nightData;
-
+            $day['night'] = $this->_aggregateWeatherData($date, Configuration::$nightInterval);
 
             // aggregate data for the whole day
-            $fullDayData = array();
-
-            $fullDayData['recorded_temperature'] = $this->_averageValues($date, Configuration::$fullDayInterval, $this->_hourlyRecordedTemperature);
-            $fullDayData['apparent_temperature'] = $this->_averageValues($date, Configuration::$fullDayInterval, $this->_hourlyApparentTemperature);
-            $fullDayData['precipitation']        = $this->_averageValues($date, Configuration::$fullDayInterval, $this->_hourlyPrecipitation);
-            $fullDayData['snow_amount']          = $this->_averageValues($date, Configuration::$fullDayInterval, $this->_hourlySnowAmount);
-            $fullDayData['cloud_coverage']       = $this->_averageValues($date, Configuration::$fullDayInterval, $this->_hourlyCloudCover);
-            $fullDayData['humidity']             = $this->_averageValues($date, Configuration::$fullDayInterval, $this->_hourlyHumidity);
-            $fullDayData['weather_conditions']   = $this->_averageWeatherConditions($date, Configuration::$fullDayInterval);
-            $fullDayData['sky_condition']        = $this->_getSkyCondition($fullDayData['cloud_coverage'], TRUE);
-            $fullDayData['description']          = $this->_getDescription($fullDayData['sky_condition'], $fullDayData['weather_conditions']);
-
-            $day['full_day'] = $fullDayData;
+            $day['full_day'] = $this->_aggregateWeatherData($date, Configuration::$fullDayInterval);
 
 
             $weatherData[$date] = $day;
@@ -474,6 +410,30 @@ class ForecastModel
         return $degreesC;
     }
 
+
+    /**
+     * Function to aggregate all weather data into a time interval
+     * 
+     * @param string $date The date part of the key for the data array
+     * @param array $timeInterval The time interval to aggregate data for
+     * @return array
+     */
+    private function _aggregateWeatherData($date, $timeInterval)
+    {
+            $aggregateData = array();
+
+            $aggregateData['recorded_temperature'] = $this->_averageValues($date, $timeInterval, $this->_hourlyRecordedTemperature);
+            $aggregateData['apparent_temperature'] = $this->_averageValues($date, $timeInterval, $this->_hourlyApparentTemperature);
+            $aggregateData['precipitation']        = $this->_averageValues($date, $timeInterval, $this->_hourlyPrecipitation);
+            $aggregateData['snow_amount']          = $this->_averageValues($date, $timeInterval, $this->_hourlySnowAmount);
+            $aggregateData['cloud_coverage']       = $this->_averageValues($date, $timeInterval, $this->_hourlyCloudCover);
+            $aggregateData['humidity']             = $this->_averageValues($date, $timeInterval, $this->_hourlyHumidity);
+            $aggregateData['weather_conditions']   = $this->_averageWeatherConditions($date, $timeInterval);
+            $aggregateData['sky_condition']        = $this->_getSkyCondition($aggregateData['cloud_coverage'], TRUE);
+            $aggregateData['description']          = $this->_getDescription($aggregateData['sky_condition'], $aggregateData['weather_conditions']);
+
+            return $aggregateData;
+    }
 
 
     /**
