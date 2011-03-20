@@ -303,7 +303,7 @@ class DWMLParser
                     // the timestamp for this index in the time layout
                     $key = $timeLayouts[$layout][$i];
                     // the temperature value for this index
-                    $value = intval($precipitation->value[$i]);
+                    $value = floatval($precipitation->value[$i]);
 
                     $hourlyPrecipitation[$key] = $value;
 
@@ -328,7 +328,7 @@ class DWMLParser
                     // the timestamp for this index in the time layout
                     $key = $timeLayouts[$layout][$i];
                     // the temperature value for this index
-                    $value = intval($precipitation->value[$i]);
+                    $value = floatval($precipitation->value[$i]);
 
                     $hourlySnowAmount[$key] = $value;
 
