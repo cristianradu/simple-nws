@@ -212,7 +212,7 @@ class DWMLParser
 
                     $hourlyTemperatures[$key] = $value;
 
-                    $this->_forecast->setWeatherDataForTimestamp($key, 'recorded_temperature', $value);
+                    $this->_forecast->setRawWeatherDataForTimestamp($key, 'recorded_temperature', $value);
                 }
 
                 // save the maximum temperature in the forecast model
@@ -237,7 +237,7 @@ class DWMLParser
 
                     $apparentTemperatures[$key] = $value;
 
-                    $this->_forecast->setWeatherDataForTimestamp($key, 'apparent_temperature', $value);
+                    $this->_forecast->setRawWeatherDataForTimestamp($key, 'apparent_temperature', $value);
                 }
 
                 // save the maximum temperature in the forecast model
@@ -312,7 +312,7 @@ class DWMLParser
 
                     $hourlyPrecipitation[$key] = $value;
 
-                    $this->_forecast->setWeatherDataForTimestamp($key, 'liquid_precipitation', $value);
+                    $this->_forecast->setRawWeatherDataForTimestamp($key, 'liquid_precipitation', $value);
                 }
 
                 // save the liquid precipitation in the forecast model
@@ -337,7 +337,7 @@ class DWMLParser
 
                     $hourlySnowAmount[$key] = $value;
 
-                    $this->_forecast->setWeatherDataForTimestamp($key, 'snow_amount', $value);
+                    $this->_forecast->setRawWeatherDataForTimestamp($key, 'snow_amount', $value);
                 }
 
                 // save the snow amount in the forecast model
@@ -363,7 +363,7 @@ class DWMLParser
 
                 $hourlyCloudCover[$key] = $value;
 
-                $this->_forecast->setWeatherDataForTimestamp($key, 'cloud_cover', $value);
+                $this->_forecast->setRawWeatherDataForTimestamp($key, 'cloud_cover', $value);
             }
 
             // save the cloud cover in the forecast model
@@ -388,7 +388,7 @@ class DWMLParser
 
                 $hourlyHumidity[$key] = $value;
 
-                $this->_forecast->setWeatherDataForTimestamp($key, 'humidity', $value);
+                $this->_forecast->setRawWeatherDataForTimestamp($key, 'humidity', $value);
             }
 
             // save the relative humidity in the forecast model
@@ -421,7 +421,7 @@ class DWMLParser
 
                 $hourlyWeatherConditions[$key] = $conditions;
 
-                $this->_forecast->setWeatherDataForTimestamp($key, 'weather_conditions', $conditions);
+                $this->_forecast->setRawWeatherDataForTimestamp($key, 'weather_conditions', $conditions);
             }
         }
 

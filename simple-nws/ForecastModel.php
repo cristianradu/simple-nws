@@ -61,7 +61,7 @@ class ForecastModel
     /**
      * @var array Array with complete weather data organized by timestamp
      */
-    private $_completeWeatherData;
+    private $_rawWeatherData;
 
     /**
      * @var array Array with complete, ready-to-use weather data organized by day
@@ -265,9 +265,9 @@ class ForecastModel
     /**
      * @return array
      */
-    public function getCompleteWeatherData()
+    public function getRawWeatherData()
     {
-        return $this->_completeWeatherData;
+        return $this->_rawWeatherData;
     }
 
     /**
@@ -275,9 +275,9 @@ class ForecastModel
      * @param string $weatherType
      * @param mixed $weatherData
      */
-    public function setWeatherDataForTimestamp($timestamp, $weatherType, $weatherData)
+    public function setRawWeatherDataForTimestamp($timestamp, $weatherType, $weatherData)
     {
-        $this->_completeWeatherData[$timestamp][$weatherType] = $weatherData;
+        $this->_rawWeatherData[$timestamp][$weatherType] = $weatherData;
     }
 
 
