@@ -308,6 +308,30 @@ class ForecastModel
 
 
     /**
+     * Returns the hourly sky condition based on the cloud coverage and day/night
+     *
+     * @return array
+     */
+    public function getHourlySkyCondition()
+    {
+        $hourlySkyCondition = array();
+
+        $daylightHours = array_unique(array_merge(Configuration::$morningInterval, Configuration::$afternoonInterval));
+
+        foreach ($this->_hourlyCloudCover as $key => $cloudCoverage)
+        {
+            $keyParts = explode('-', $key);
+            $hour = $keyParts[count($keyParts)-1];
+            $isDay = (in_array($hour, $daylightHours)) ? TRUE : FALSE;
+
+            $hourlySkyCondition[$key] = $this->_getSkyCondition($cloudCoverage, $isDay);
+        }
+
+        return $hourlySkyCondition;
+    }
+
+
+    /**
      * Organized all raw weather data by day, in a ready-to use format
      */
     public function organizeWeatherData()
@@ -346,6 +370,8 @@ class ForecastModel
             $morningData['cloud_coverage']       = $this->_averageValues($date, Configuration::$morningInterval, $this->_hourlyCloudCover);
             $morningData['humidity']             = $this->_averageValues($date, Configuration::$morningInterval, $this->_hourlyHumidity);
             $morningData['weather_conditions']   = $this->_averageWeatherConditions($date, Configuration::$morningInterval);
+            $morningData['sky_condition']        = $this->_getSkyCondition($morningData['cloud_coverage'], TRUE);
+            $morningData['description']          = $this->_getDescription($morningData['sky_condition'], $morningData['weather_conditions']);
 
             $day['morning'] = $morningData;
 
@@ -360,6 +386,8 @@ class ForecastModel
             $afternoonData['cloud_coverage']       = $this->_averageValues($date, Configuration::$afternoonInterval, $this->_hourlyCloudCover);
             $afternoonData['humidity']             = $this->_averageValues($date, Configuration::$afternoonInterval, $this->_hourlyHumidity);
             $afternoonData['weather_conditions']   = $this->_averageWeatherConditions($date, Configuration::$afternoonInterval);
+            $afternoonData['sky_condition']        = $this->_getSkyCondition($afternoonData['cloud_coverage'], TRUE);
+            $afternoonData['description']          = $this->_getDescription($afternoonData['sky_condition'], $afternoonData['weather_conditions']);
 
             $day['afternoon'] = $afternoonData;
 
@@ -374,6 +402,8 @@ class ForecastModel
             $eveningData['cloud_coverage']       = $this->_averageValues($date, Configuration::$eveningInterval, $this->_hourlyCloudCover);
             $eveningData['humidity']             = $this->_averageValues($date, Configuration::$eveningInterval, $this->_hourlyHumidity);
             $eveningData['weather_conditions']   = $this->_averageWeatherConditions($date, Configuration::$eveningInterval);
+            $eveningData['sky_condition']        = $this->_getSkyCondition($eveningData['cloud_coverage'], FALSE);
+            $eveningData['description']          = $this->_getDescription($eveningData['sky_condition'], $eveningData['weather_conditions']);
 
             $day['evening'] = $eveningData;
 
@@ -388,6 +418,8 @@ class ForecastModel
             $nightData['cloud_coverage']       = $this->_averageValues($date, Configuration::$nightInterval, $this->_hourlyCloudCover);
             $nightData['humidity']             = $this->_averageValues($date, Configuration::$nightInterval, $this->_hourlyHumidity);
             $nightData['weather_conditions']   = $this->_averageWeatherConditions($date, Configuration::$nightInterval);
+            $nightData['sky_condition']        = $this->_getSkyCondition($nightData['cloud_coverage'], FALSE);
+            $nightData['description']          = $this->_getDescription($nightData['sky_condition'], $nightData['weather_conditions']);
 
             $day['night'] = $nightData;
 
@@ -402,6 +434,8 @@ class ForecastModel
             $fullDayData['cloud_coverage']       = $this->_averageValues($date, Configuration::$fullDayInterval, $this->_hourlyCloudCover);
             $fullDayData['humidity']             = $this->_averageValues($date, Configuration::$fullDayInterval, $this->_hourlyHumidity);
             $fullDayData['weather_conditions']   = $this->_averageWeatherConditions($date, Configuration::$fullDayInterval);
+            $fullDayData['sky_condition']        = $this->_getSkyCondition($fullDayData['cloud_coverage'], TRUE);
+            $fullDayData['description']          = $this->_getDescription($fullDayData['sky_condition'], $fullDayData['weather_conditions']);
 
             $day['full_day'] = $fullDayData;
 
@@ -415,7 +449,7 @@ class ForecastModel
 
     /**
      * Convertor from Fahrenheit to Celsius
-     *  The result will be rounded to the nearest int
+     * The result will be rounded to the nearest int
      *
      * @param mixed $degreesF The temperature(s) in Fahrenheit
      * @return mixed
@@ -538,6 +572,94 @@ class ForecastModel
         }
 
         return $weatherConditions;
+    }
+
+
+    /**
+     * Describes the state of the sky based on the cloud coverage
+     * Uses definitions from: http://www.weatherworks.com/files/SPECIAL_SAW_files/partly_cloudy-partly_sunny.html
+     *
+     * @param integer $cloudCoverage The percentage of cloud coverage
+     * @param boolean $isDay Determines if the request is during the day or at night
+     * @return string
+     */
+    private function _getSkyCondition($cloudCoverage, $isDay)
+    {
+        $skyCondition = '';
+
+        switch (round($cloudCoverage / 100 * 8))
+        {
+            case 0:
+                $skyCondition = ($isDay) ? 'Sunny' : 'Clear';
+                break;
+            case 1:
+            case 2:
+                $skyCondition = ($isDay) ? 'Mostly Sunny' : 'Mostly Clear';
+                break;
+            case 3:
+            case 4:
+            case 5:
+                $skyCondition = ($isDay) ? 'Partly Sunny' : 'Partly Cloudy';
+                break;
+            case 6:
+            case 7:
+                $skyCondition = ($isDay) ? 'Mostly Cloudy' : 'Mostly Cloudy';
+                break;
+            case 8:
+                $skyCondition = ($isDay) ? 'Cloudy' : 'Cloudy';
+                break;
+        }
+
+        return $skyCondition;
+    }
+
+
+    /**
+     * Builds an overall description of the weather for a timeframe
+     *
+     * @param string $skyCondition The sky condition (determined from the cloud coverage)
+     * @param array $weatherConditions The weather conditions array
+     * @return string
+     */
+    private function _getDescription($skyCondition, $weatherConditions)
+    {
+        if (empty($weatherConditions))
+        {
+            // if there are no notable weather conditions, return the sky condition
+            return $skyCondition;
+        }
+        else
+        {
+            // build a descriptor for the weather conditions
+            $description = '';
+
+            switch ($weatherConditions['coverage'])
+            {
+                case 'chance':
+                case 'slight chance':
+                    $description .= $weatherConditions['coverage'].' of ';
+                    break;
+                case 'definitely':
+                case 'likely':
+                default:
+                    break;
+            }
+
+            switch ($weatherConditions['intensity'])
+            {
+                case 'heavy':
+                    $description .= $weatherConditions['intensity'].' ';
+                    break;
+                case 'light':
+                case 'very light':
+                default:
+                    break;
+            }
+
+            $description .= $weatherConditions['weather_type'];
+
+            return ucwords($description);
+        }
     }
 }
 ?>
