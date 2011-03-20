@@ -65,5 +65,29 @@ class Configuration
                                       'sky',   // Cloud Cover Amount
                                       'rh');   // Relative Humidity
 
+
+    /**
+     * The hour intervals that will be averaged for morning/afternoon/evening/night weather organization
+     */
+    /**
+     * @var array The hours that will be averaged for the morning interval
+     */
+    static $morningInterval   = array('08', '11');
+    /**
+     * @var array The hours that will be averaged for the afternoon interval
+     */
+    static $afternoonInterval = array('11', '14', '17');
+    /**
+     * @var array The hours that will be averaged for the evening interval
+     */
+    static $eveningInterval   = array('17', '20', '23');
+    /**
+     * @var array The hours that will be averaged for the night interval
+     */
+    static $nightInterval     = array('23', '02', '05');
+    /**
+     * @var array The hours that will be averaged for the full day interval
+     */
+    static $fullDayInterval   = array('08', '11', '14', '17', '20', '23');
 }
 ?>
