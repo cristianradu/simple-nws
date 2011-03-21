@@ -361,19 +361,19 @@ class ForecastModel
 
 
             // aggregate data for the morning
-            $day['morning'] = $this->_aggregateWeatherData($date, Configuration::$morningInterval);
+            $day['morning']   = $this->_aggregateWeatherData($date, Configuration::$morningInterval);
 
             // aggregate data for the afternoon
             $day['afternoon'] = $this->_aggregateWeatherData($date, Configuration::$afternoonInterval);
 
             // aggregate data for the evening
-            $day['evening'] = $this->_aggregateWeatherData($date, Configuration::$eveningInterval);
+            $day['evening']   = $this->_aggregateWeatherData($date, Configuration::$eveningInterval);
 
             // aggregate data for the night
-            $day['night'] = $this->_aggregateWeatherData($date, Configuration::$nightInterval);
+            $day['night']     = $this->_aggregateWeatherData($date, Configuration::$nightInterval);
 
             // aggregate data for the whole day
-            $day['full_day'] = $this->_aggregateWeatherData($date, Configuration::$fullDayInterval);
+            $day['full_day']  = $this->_aggregateWeatherData($date, Configuration::$fullDayInterval);
 
 
             $weatherData[$date] = $day;

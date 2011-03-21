@@ -56,10 +56,19 @@ class DWMLParser
         // perform the request and get the XML data
         $xmlData = simplexml_load_file($requestURL);
 
+
+        // check if the response is empty
         if (empty($xmlData))
         {
             throw new \Exception('Empty response from the National Weather Service. Please try again later.');
         }
+
+        // check if the response is an error message
+        if ($xmlData->h2 == 'ERROR')
+        {
+            throw new \Exception('Error response from the National Weather Service. Please check your input parameters and try again later.');
+        }
+
 
         // parse the XML data into the forecast model
         $this->_parseXML($xmlData);
