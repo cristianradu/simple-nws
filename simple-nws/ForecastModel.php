@@ -361,19 +361,19 @@ class ForecastModel
 
 
             // aggregate data for the morning
-            $day['morning']   = $this->_aggregateWeatherData($date, Configuration::$morningInterval);
+            $day['morning']   = $this->_aggregateWeatherData($date, Configuration::$morningInterval,   TRUE);
 
             // aggregate data for the afternoon
-            $day['afternoon'] = $this->_aggregateWeatherData($date, Configuration::$afternoonInterval);
+            $day['afternoon'] = $this->_aggregateWeatherData($date, Configuration::$afternoonInterval, TRUE);
 
             // aggregate data for the evening
-            $day['evening']   = $this->_aggregateWeatherData($date, Configuration::$eveningInterval);
+            $day['evening']   = $this->_aggregateWeatherData($date, Configuration::$eveningInterval,   FALSE);
 
             // aggregate data for the night
-            $day['night']     = $this->_aggregateWeatherData($date, Configuration::$nightInterval);
+            $day['night']     = $this->_aggregateWeatherData($date, Configuration::$nightInterval,     FALSE);
 
             // aggregate data for the whole day
-            $day['full_day']  = $this->_aggregateWeatherData($date, Configuration::$fullDayInterval);
+            $day['full_day']  = $this->_aggregateWeatherData($date, Configuration::$fullDayInterval,   TRUE);
 
 
             $weatherData[$date] = $day;
@@ -416,6 +416,7 @@ class ForecastModel
      * 
      * @param string $date The date part of the key for the data array
      * @param array $timeInterval The time interval to aggregate data for
+     * @param boolean $daylight Determines if the request is during the day or at night
      * @return array
      */
     private function _aggregateWeatherData($date, $timeInterval)
@@ -429,7 +430,7 @@ class ForecastModel
             $aggregateData['cloud_coverage']       = $this->_averageValues($date, $timeInterval, $this->_hourlyCloudCover);
             $aggregateData['humidity']             = $this->_averageValues($date, $timeInterval, $this->_hourlyHumidity);
             $aggregateData['weather_conditions']   = $this->_averageWeatherConditions($date, $timeInterval);
-            $aggregateData['sky_condition']        = $this->_getSkyCondition($aggregateData['cloud_coverage'], TRUE);
+            $aggregateData['sky_condition']        = $this->_getSkyCondition($aggregateData['cloud_coverage'], $daylight);
             $aggregateData['description']          = $this->_getDescription($aggregateData['sky_condition'], $aggregateData['weather_conditions']);
 
             return $aggregateData;
@@ -540,33 +541,33 @@ class ForecastModel
      * Uses definitions from: http://www.weatherworks.com/files/SPECIAL_SAW_files/partly_cloudy-partly_sunny.html
      *
      * @param integer $cloudCoverage The percentage of cloud coverage
-     * @param boolean $isDay Determines if the request is during the day or at night
+     * @param boolean $daylight Determines if the request is during the day or at night
      * @return string
      */
-    private function _getSkyCondition($cloudCoverage, $isDay)
+    private function _getSkyCondition($cloudCoverage, $daylight)
     {
         $skyCondition = '';
 
         switch (round($cloudCoverage / 100 * 8))
         {
             case 0:
-                $skyCondition = ($isDay) ? 'Sunny' : 'Clear';
+                $skyCondition = ($daylight) ? 'Sunny' : 'Clear';
                 break;
             case 1:
             case 2:
-                $skyCondition = ($isDay) ? 'Mostly Sunny' : 'Mostly Clear';
+                $skyCondition = ($daylight) ? 'Mostly Sunny' : 'Mostly Clear';
                 break;
             case 3:
             case 4:
             case 5:
-                $skyCondition = ($isDay) ? 'Partly Sunny' : 'Partly Cloudy';
+                $skyCondition = ($daylight) ? 'Partly Sunny' : 'Partly Cloudy';
                 break;
             case 6:
             case 7:
-                $skyCondition = ($isDay) ? 'Mostly Cloudy' : 'Mostly Cloudy';
+                $skyCondition = ($daylight) ? 'Mostly Cloudy' : 'Mostly Cloudy';
                 break;
             case 8:
-                $skyCondition = ($isDay) ? 'Cloudy' : 'Cloudy';
+                $skyCondition = ($daylight) ? 'Cloudy' : 'Cloudy';
                 break;
         }
 
