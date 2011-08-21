@@ -4,6 +4,43 @@ Specifically, providing its REST APIs with a simplified interface.
 
 
 
+---------------------------------------------------------------------------
+
+Example:
+
+// set your values for latitude and longitude
+$lat  =  40.75;
+$long = -73.92;
+
+// instantiate the library
+$simpleNWS = new SimpleNWS($lat, $long);
+
+// get the forecast (for today in this example)
+$forecast = $simpleNWS->getForecastForToday();
+
+// extract the data that you need
+$apparentTemperature = $forecast->getHourlyApparentTemperature();
+
+
+Alternate use:
+
+If you prefer, you can pass the latitude and longitude parameters to the forecast function instead of the library constructor:
+
+$simpleNWS = new SimpleNWS();
+
+$forecast = $simpleNWS->getForecastForToday($lat, $long);
+
+
+
+Library Methods
+
+- getCurrentConditions()
+- getForecastForToday()
+- getForecastForWeek()
+
+
+
+
 
 
 Forecast Model

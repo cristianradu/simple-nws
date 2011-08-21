@@ -341,13 +341,6 @@ class ForecastModel
         // loop through each of the date layouts (days)
         foreach ($this->_dateLayouts as $date)
         {
-            // since the array is likely to start the evening before the first complete day
-            // skip date layouts that don't have weather data for 8 AM
-            if (!array_key_exists($date.'-08', $this->_hourlyApparentTemperature))
-            {
-                continue;
-            }
-
             $day = array();
 
             // the name of the day (in the week)
