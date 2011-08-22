@@ -7,13 +7,15 @@ require_once 'simple-nws/SimpleNWS.php';
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>SimpleNWS Tester</title>
+        <title>SimpleNWS Example</title>
         <style type="text/css">
             pre { font-family: Monaco, Consolas, monospace; font-size: 12px; }
         </style>
     </head>
     <body>
         
+        <h1>SimpleNWS Example</h1>
+
         <pre>
 
 <?php
