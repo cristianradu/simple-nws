@@ -412,7 +412,7 @@ class ForecastModel
      * @param boolean $daylight Determines if the request is during the day or at night
      * @return array
      */
-    private function _aggregateWeatherData($date, $timeInterval)
+    private function _aggregateWeatherData($date, $timeInterval, $daylight)
     {
             $aggregateData = array();
 
