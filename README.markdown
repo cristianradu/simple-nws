@@ -5,7 +5,7 @@ PHP library for accessing NOAA's National Weather Service.
 
 Using the free REST API provided by the National Weather Service should be straightforward enough - except it isn't. The results are overly convoluted - made to be read by machines, not humans. The purpose of this library is to make all that easier by doing all the hard work for you - it takes a latitude and longitude and gives back a nicely formatted object with all the weather data you need.
 
-Requires PHP 5.x. Written by Cristian Radu, <http://cristianradu.com/>. MIT licensed, see the [LICENSE](./LICENSE) file for details.
+Requires PHP 5.3 (uses namespaces). Written by Cristian Radu, <http://cristianradu.com/>. MIT licensed, see the [LICENSE](./LICENSE) file for details.
 
 Example
 -------
