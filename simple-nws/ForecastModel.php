@@ -481,28 +481,31 @@ class ForecastModel
         // for each type of coverage, store the complete info
         foreach ($hours as $hour)
         {
-            $weatherInfo = $this->_weatherConditions[$date.'-'.$hour];
-
-            switch ($weatherInfo['coverage'])
+            if (array_key_exists($date.'-'.$hour, $this->_weatherConditions))
             {
-                case 'definitely':
-                    $coverageFactor += 1000;
-                    $weatherByFactor['definitely'] = $weatherInfo;
-                    break;
-                case 'likely':
-                    $coverageFactor += 100;
-                    $weatherByFactor['likely'] = $weatherInfo;
-                    break;
-                case 'chance':
-                    $coverageFactor += 10;
-                    $weatherByFactor['chance'] = $weatherInfo;
-                    break;
-                case 'slight chance':
-                    $coverageFactor += 1;
-                    $weatherByFactor['slight-chance'] = $weatherInfo;
-                    break;
-                default:
-                    break;
+                $weatherInfo = $this->_weatherConditions[$date.'-'.$hour];
+
+                switch ($weatherInfo['coverage'])
+                {
+                    case 'definitely':
+                        $coverageFactor += 1000;
+                        $weatherByFactor['definitely'] = $weatherInfo;
+                        break;
+                    case 'likely':
+                        $coverageFactor += 100;
+                        $weatherByFactor['likely'] = $weatherInfo;
+                        break;
+                    case 'chance':
+                        $coverageFactor += 10;
+                        $weatherByFactor['chance'] = $weatherInfo;
+                        break;
+                    case 'slight chance':
+                        $coverageFactor += 1;
+                        $weatherByFactor['slight-chance'] = $weatherInfo;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
