@@ -347,10 +347,16 @@ class ForecastModel
             $day['day_of_week'] = date('l', strtotime($date));
 
             // the maximum temperature of the day
-            $day['max_temperature'] = $this->_dailyMaximumTemperature[$date.'-08'];
+            if (array_key_exists($date.'-08', $this->_dailyMaximumTemperature))
+            {
+                $day['max_temperature'] = $this->_dailyMaximumTemperature[$date.'-08'];
+            }
 
             // the minimum temperature of the day
-            $day['min_temperature'] = $this->_dailyMinimumTemperature[$date.'-20'];
+            if (array_key_exists($date.'-20', $this->_dailyMinimumTemperature))
+            {
+                $day['min_temperature'] = $this->_dailyMinimumTemperature[$date.'-20'];
+            }
 
 
             // aggregate data for the morning
@@ -451,7 +457,11 @@ class ForecastModel
             if (($i > 0) && ($hours[$i] < $hours[$i-1]))
             {
                 $oldDateKey = array_search($date, $this->_dateLayouts);
-                $date = $this->_dateLayouts[$oldDateKey + 1];
+                $newDateKey = $oldDateKey + 1;
+                if (array_key_exists($newDateKey, $this->_dateLayouts))
+                {
+                    $date = $this->_dateLayouts[$newDateKey];
+                }
             }
 
             $key = $date.'-'.$hour;
