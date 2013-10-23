@@ -454,7 +454,11 @@ class ForecastModel
                 $date = $this->_dateLayouts[$oldDateKey + 1];
             }
 
-            $sum  += $dataArray[$date.'-'.$hour];
+            $key = $date.'-'.$hour;
+            if (array_key_exists($key, $dataArray))
+            {
+                $sum += $dataArray[$key];
+            }
             $count++;
         }
 
