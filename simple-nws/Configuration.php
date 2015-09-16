@@ -12,7 +12,7 @@ class Configuration
     /**
      * @var string constant The URL for the National Weather Service interface
      */
-    const C_NWS_URL = 'http://www.weather.gov/forecasts/xml/sample_products/browser_interface/ndfdXMLclient.php?';
+    const C_NWS_URL = 'http://graphical.weather.gov/xml/sample_products/browser_interface/ndfdXMLclient.php?';
 
     /**
      * @var array The allowed values for the timeframe parameter
