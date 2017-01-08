@@ -347,13 +347,13 @@ class ForecastModel
             $day['day_of_week'] = date('l', strtotime($date));
 
             // the maximum temperature of the day
-            if (array_key_exists($date.'-08', $this->_dailyMaximumTemperature))
+            if (isset($this->_dailyMaximumTemperature) && array_key_exists($date.'-08', $this->_dailyMaximumTemperature))
             {
                 $day['max_temperature'] = $this->_dailyMaximumTemperature[$date.'-08'];
             }
 
             // the minimum temperature of the day
-            if (array_key_exists($date.'-20', $this->_dailyMinimumTemperature))
+            if (isset($this->_dailyMinimumTemperature) && array_key_exists($date.'-20', $this->_dailyMinimumTemperature))
             {
                 $day['min_temperature'] = $this->_dailyMinimumTemperature[$date.'-20'];
             }
