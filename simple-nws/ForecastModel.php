@@ -45,6 +45,14 @@ class ForecastModel
      */
     private $_hourlySnowAmount;
     /**
+     * @var array Array with hourly wind speed
+     */
+    private $_hourlyWindSpeed;
+    /**
+     * @var array Array with hourly wind direction
+     */
+    private $_hourlyWindDirection;
+    /**
      * @var array Array with hourly cloud coverage
      */
     private $_hourlyCloudCover;
@@ -208,6 +216,40 @@ class ForecastModel
     public function setHourlySnowAmount($hourlySnowAmount)
     {
         $this->_hourlySnowAmount = $hourlySnowAmount;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getHourlyWindSpeed()
+    {
+        return $this->_hourlyWindSpeed;
+    }
+
+    /**
+     * @param array $hourlyWindSpeed
+     */
+    public function setHourlyWindSpeed($hourlyWindSpeed)
+    {
+        $this->_hourlyWindSpeed = $hourlyWindSpeed;
+    }
+
+
+    /**
+     * @return array
+     */
+    public function getHourlyWindDirection()
+    {
+        return $this->_hourlyWindDirection;
+    }
+
+    /**
+     * @param array $hourlyWindDirection
+     */
+    public function setHourlyWindDirection($hourlyWindDirection)
+    {
+        $this->_hourlyWindDirection = $hourlyWindDirection;
     }
 
 
@@ -426,6 +468,8 @@ class ForecastModel
             $aggregateData['apparent_temperature'] = $this->_averageValues($date, $timeInterval, $this->_hourlyApparentTemperature);
             $aggregateData['precipitation']        = $this->_averageValues($date, $timeInterval, $this->_hourlyPrecipitation);
             $aggregateData['snow_amount']          = $this->_averageValues($date, $timeInterval, $this->_hourlySnowAmount);
+            $aggregateData['wind_speed']           = $this->_averageValues($date, $timeInterval, $this->_hourlyWindSpeed);
+            $aggregateData['wind_direction']       = $this->_averageValues($date, $timeInterval, $this->_hourlyWindDirection);
             $aggregateData['cloud_coverage']       = $this->_averageValues($date, $timeInterval, $this->_hourlyCloudCover);
             $aggregateData['humidity']             = $this->_averageValues($date, $timeInterval, $this->_hourlyHumidity);
             $aggregateData['weather_conditions']   = $this->_averageWeatherConditions($date, $timeInterval);

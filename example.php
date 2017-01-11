@@ -52,6 +52,10 @@ try
             print_r($forecast->getHourlyPrecipitation(), true),"\n";
     echo 'Hourly Snow Amount: ',          
             print_r($forecast->getHourlySnowAmount(), true),"\n";
+    echo 'Hourly Wind Speed: ',       
+            print_r($forecast->getHourlyWindSpeed(), true),"\n";
+    echo 'Hourly Wind Direction: ',       
+            print_r($forecast->getHourlyWindDirection(), true),"\n";
     echo 'Hourly Cloud Coverage: ',       
             print_r($forecast->getHourlyCloudCover(), true),"\n";
     echo 'Hourly Humidity: ',             

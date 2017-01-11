@@ -354,6 +354,56 @@ class DWMLParser
             }
         }
 
+        // hourly wind speed
+        foreach ($parameters->{'wind-speed'} as $windSpeed)
+        {
+            $hourlyWindSpeed = array();
+
+            // get the time layout for this parameter
+            $layout = strval($windSpeed->attributes()->{'time-layout'});
+
+            // we'll go through each value and assign it to its specific time interval
+            for ($i = 0; $i < count($windSpeed->value); $i++)
+            {
+                // the timestamp for this index in the time layout
+                $key = $timeLayouts[$layout][$i];
+                // the temperature value for this index
+                $value = intval($windSpeed->value[$i]);
+
+                $hourlyWindSpeed[$key] = $value;
+
+                $this->_forecast->setRawWeatherDataForTimestamp($key, 'wind_speed', $value);
+            }
+
+            // save the wind speed in the forecast model
+            $this->_forecast->setHourlyWindSpeed($hourlyWindSpeed);
+        }
+
+        // hourly wind direction
+        foreach ($parameters->{'direction'} as $windDirection)
+        {
+            $hourlyWindDirection = array();
+
+            // get the time layout for this parameter
+            $layout = strval($windDirection->attributes()->{'time-layout'});
+
+            // we'll go through each value and assign it to its specific time interval
+            for ($i = 0; $i < count($windDirection->value); $i++)
+            {
+                // the timestamp for this index in the time layout
+                $key = $timeLayouts[$layout][$i];
+                // the temperature value for this index
+                $value = intval($windDirection->value[$i]);
+
+                $hourlyWindDirection[$key] = $value;
+
+                $this->_forecast->setRawWeatherDataForTimestamp($key, 'wind_direction', $value);
+            }
+
+            // save the wind direction in the forecast model
+            $this->_forecast->setHourlyWindDirection($hourlyWindDirection);
+        }
+
         // hourly cloud cover
         foreach ($parameters->{'cloud-amount'} as $cloudCover)
         {

@@ -96,6 +96,20 @@ All the methods return a forecast model object. You can use the following method
         <td>inches</td>
     </tr>
     <tr>
+        <td>Hourly Wind Speed</td>
+        <td><code>getHourlyWindSpeed()</code></td>
+        <td>array of integers</td>
+        <td>hourly (every 3h)</td>
+        <td>knots</td>
+    </tr>
+    <tr>
+        <td>Hourly Wind Direction</td>
+        <td><code>getHourlyWindDirection()</code></td>
+        <td>array of integers</td>
+        <td>hourly (every 3h)</td>
+        <td>degrees</td>
+    </tr>
+    <tr>
         <td>Hourly Cloud Coverage</td>
         <td><code>getHourlyCloudCover()</code></td>
         <td>array of integers</td>

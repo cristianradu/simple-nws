@@ -63,6 +63,8 @@ class Configuration
                                       'qpf',   // Liquid Precipitation Amount
                                       'snow',  // Snowfall Amount
                                       'sky',   // Cloud Cover Amount
+                                      'wspd',  // Wind Speed
+                                      'wdir',  // Wind Direction
                                       'rh');   // Relative Humidity
 
 
