@@ -1,5 +1,6 @@
 <?php
 namespace SimpleNWS;
+ini_set('user_agent','Mozilla/5.0'); 
 /**
  * Parser for NOAA's Digital Weather Markup Language
  *
