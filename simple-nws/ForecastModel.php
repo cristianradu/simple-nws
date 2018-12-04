@@ -509,7 +509,7 @@ class ForecastModel
             }
 
             $key = $date.'-'.$hour;
-            if (array_key_exists($key, $dataArray))
+            if (isset($dataArray) && array_key_exists($key, $dataArray))
             {
                 $sum += $dataArray[$key];
             }
